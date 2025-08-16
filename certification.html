@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>URL Submission Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-image: url(gif2.gif);
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    .container {
+      form {
+      margin: auto;
+      width: min(600px, 80%);
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+    }
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #fdfcfb;
+    }
+    label {
+      font-size: 14px;
+      color: #fdfcfb;
+    }
+    textarea {
+      height: 100px;
+      resize: vertical;
+      background-color: transparent;
+      width: 95%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-sizing: border-box;
+      opacity: 0.5;
+      transition: all 0.3s ease;
+    }
+    input[type="url"],
+    input[type="email"],
+    input[type="submit"] {
+      width: 90%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      background: transparent;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    input[type="submit"] {
+      background-color: #4CAF50;
+      color: #fff;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Submit Your Certificates</h2>
+    <form id="certForm" action="http://localhost:3001/submitCertificates" method="POST">
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" placeholder="youremail@example.com" required>
+
+      <label for="file1">Certificate 1:</label>
+      <input type="url" id="file1" name="file1" placeholder="https://example.com" required>
+
+      <label for="file2">Certificate 2:</label>
+      <input type="url" id="file2" name="file2" placeholder="https://example.com" required>
+
+      <label for="description">Description:</label>
+      <textarea id="description"  name="description" maxlength="250" placeholder="I have Participate in xyz event and Won 1st price with some x cashprice etc..." style="font-size: medium; color:#fff; "></textarea>
+
+      <input type="submit" value="Submit">
+
+      
+    </form>
+  </div>
+
+  <script>
+    // Function to get the email from sessionStorage
+    function getEmailFromStorage() {
+      return sessionStorage.getItem('email'); // Retrieve the email from sessionStorage
+    }
+
+    // Function to get email from URL (if passed as query parameter)
+    function getEmailFromURL() {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('email');
+    }
+
+    // On page load, pre-fill the email field and store it in sessionStorage
+    window.onload = function() {
+      const emailField = document.getElementById('email');
+      
+      // First try to get the email from sessionStorage
+      const emailFromStorage = getEmailFromStorage();
+      if (emailFromStorage) {
+        emailField.value = emailFromStorage;
+      } else {
+        // If email is not in sessionStorage, try getting it from URL
+        const emailFromURL = getEmailFromURL();
+        if (emailFromURL) {
+          emailField.value = emailFromURL;
+          sessionStorage.setItem('email', emailFromURL); // Save email to sessionStorage
+        }
+      }
+    }
+
+    // Store email in sessionStorage when the form is submitted
+    const form = document.querySelector('#certForm');
+    form.addEventListener('submit', function(event) {
+      const emailField = document.getElementById('email');
+      const email = emailField.value;
+      
+      if (email) {
+        sessionStorage.setItem('email', email); // Store the email in sessionStorage before submitting the form
+        console.log("Email stored in sessionStorage:", email);  // Debugging log
+      }
+    });
+
+    // Display success message after form submission (optional)
+    form.addEventListener('submit', () => {
+      alert('Your files have been submitted successfully.');
+    });
+  </script>
+  
+</body>
+</html>

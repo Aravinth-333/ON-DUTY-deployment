@@ -1,0 +1,61 @@
+*{
+    padding:1 ;
+    margin: 1;
+    box-sizing: border-box;
+    font-family: 'Courier New', Courier, monospace;
+}
+.getting-input{
+    position: relative;
+}
+
+.getting-input input{
+    width: 250px;
+    height: 50px;
+    border-radius: 5px;
+    font-size: 15px;
+    padding: 0 15px;
+    border: 2px solid whitesmoke;
+    background: transparent;
+    outline: none;
+}
+.getting-input label{
+    position:absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    color: rgb(175, 31, 31);
+    font-size: medium;
+    pointer-events: none;
+    transition: .3s;
+}
+input:focus{
+    border: 2px solid greenyellow;
+
+}
+input:focus ~ label ,input:valid ~label{
+    top:0;
+    padding:0 10px;
+    /* background-color: aqua; */
+}
+/* form {
+    margin: auto;
+    width: min(600px, 80%);
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-image: url('C:\Users\aravi\OneDrive\Desktop\od_intial\gif1.gif');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  } */
+body{
+    background: linear-gradient(#00b7c2,#4ef037);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-image: url(gif2.gif);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover; */
+}

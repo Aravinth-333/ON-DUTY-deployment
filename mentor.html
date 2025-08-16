@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentor</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+        td{
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+        .accept-button, .reject-button {
+    border: none;
+    padding: 10px 20px;  /* Same padding for both */
+    cursor: pointer;
+    font-size: 14px;      /* Same font size */
+    border-radius: 4px;   /* Optional: adds rounded corners */
+    display: inline-block; /* Ensures buttons take up the space based on padding */
+    text-align: center;   /* Align text in the center */
+    width: auto;          /* Allow button to grow or shrink based on content */
+    min-width: 120px;     /* Ensures a minimum width for both buttons */
+    box-sizing: border-box; /* Ensures padding is inside the width/height calculation */
+}
+
+.accept-button {
+    background-color: lightgreen;
+    margin-bottom: 10px;
+}
+
+.reject-button {
+    background-color: lightcoral;
+}
+
+        .disabled {
+            background-color: #d3d3d3; /* Grey out color */
+            pointer-events: none; /* Disable all mouse events */
+        }
+
+       /* Container for the dropdown */
+       .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* The button that triggers the dropdown */
+.dropdown button {
+    background-color: #4CAF50; /* Green background */
+    color: white;               /* White text */
+    padding: 12px 16px;         /* Padding for button */
+    font-size: 16px;            /* Font size */
+    border: none;               /* No border */
+    cursor: pointer;           /* Pointer cursor on hover */
+    border-radius: 5px;         /* Rounded corners */
+    transition: background-color 0.3s ease; /* Smooth transition */
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between text and icon */
+}
+
+/* Hover effect for the dropdown button */
+.dropdown button:hover {
+    background-color: #45a049; /* Darker green */
+}
+
+/* Dropdown content container */
+.dropdown-content {
+    visibility: hidden; /* Initially hidden */
+    position: absolute;
+    background-color: #ffffff; /* White background */
+    min-width: 160px; /* Minimum width of the dropdown */
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    z-index: 1; /* Make sure dropdown is above other elements */
+    border-radius: 5px; /* Rounded corners for the dropdown */
+    padding: 8px 0; /* Padding inside dropdown */
+    opacity: 0; /* Initially hidden */
+    transition: opacity 0.2s ease-in-out, visibility 0s linear 0.2s; /* Smooth transition */
+}
+
+/* When dropdown is visible */
+.dropdown.show .dropdown-content {
+    visibility: visible; /* Show dropdown */
+    opacity: 1; /* Make the dropdown visible */
+    transition-delay: 0s; /* Ensure transition happens instantly */
+}
+
+/* Styling for each dropdown link */
+.dropdown-content a {
+    color: #333; /* Dark text color */
+    padding: 12px 20px; /* Padding around the text */
+    text-decoration: none; /* Remove underline */
+    display: block; /* Make links block level */
+    font-size: 14px; /* Font size for links */
+}
+
+/* Hover effect for dropdown links */
+.dropdown-content a:hover {
+    background-color: #f1f1f1; /* Light gray background on hover */
+    color: #007bff; /* Blue text color on hover */
+}
+
+/* Optional: Add a little arrow next to the button */
+.dropdown button::after {
+    content: '▼'; /* Downward arrow */
+    font-size: 12px;
+    margin-left: 10px; /* Space between text and arrow */
+}
+
+/* Responsive styling for smaller screens */
+@media screen and (max-width: 600px) {
+    .dropdown button {
+        font-size: 14px; /* Smaller button text on mobile */
+        padding: 10px 12px; /* Adjust padding */
+    }
+
+    .dropdown-content a {
+        font-size: 12px; /* Smaller font size for links */
+        padding: 10px 16px; /* Adjust padding */
+    }
+}
+
+        /* Styling for search boxes */
+.search-box {
+    margin-bottom: 20px;
+    padding: 10px 20px;                /* Increased padding for better spacing */
+    width: 30%;                         /* Adjust width as needed */
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10px;
+    background-color: #f9f9f9;         /* Lighter background to differentiate */
+    transition: background-color 0.3s ease; /* Smooth background color transition */
+}
+
+.search-box:focus {
+    outline: none;
+    border-color: #007bff;             /* Highlight border on focus */
+    background-color: #e9f5ff;         /* Light blue background on focus */
+}
+
+.search-box:hover {
+    background-color: #f1f1f1;         /* Slight hover effect for user interaction */
+}
+
+/* Styling for sorting buttons */
+.sort-button {
+    padding: 10px 15px;                /* Padding for comfortable button size */
+    font-size: 16px;                    /* Adjust font size */
+    background-color: #007bff;         /* Blue background for sorting actions */
+    color: white;                      /* White text for better contrast */
+    border: 1px solid #007bff;         /* Border matching background */
+    border-radius: 4px;                /* Rounded corners for buttons */
+    cursor: pointer;                   /* Pointer cursor on hover */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Button transition */
+    margin-right: 10px;                 /* Space between buttons */
+}
+
+.sort-button:hover {
+    background-color: #0056b3;         /* Darker blue on hover */
+    transform: scale(1.05);             /* Slight button scale effect */
+}
+
+.sort-button:focus {
+    outline: none;
+    background-color: #004085;         /* Focus effect */
+}
+
+/* Optional: Add arrows to the sorting buttons */
+.sort-button::before {
+    content: '\2195';                  /* Unicode for up and down arrows */
+    margin-right: 8px;                  /* Space between text and icon */
+    font-size: 18px;                    /* Adjust arrow size */
+}
+
+        
+    </style>
+</head>
+<body>
+     
+    <div class="search-container">
+        <!-- Three separate search/input boxes for sorting -->
+        <input type="text" id="searchName" class="search-box" onkeyup="searchName()" placeholder="Search for Name...">
+        <input type="text" id="searchRegisterNo" class="search-box" onkeyup="searchRegisterNo()" placeholder="Search for Register No...">
+        <input type="text" id="searchYear" class="search-box" onkeyup="searchYear()" placeholder="Search for Year...">
+       
+       
+        <input type="text" id="searchStartDate" class="search-box" onkeyup="searchStartDate()" placeholder="Search for Event Start Date...">
+        <input type="text" id="searchEndDate" class="search-box" onkeyup="searchEndDate()" placeholder="Search for Event End Date...">
+
+    </div>
+ 
+
+    <div class="dropdown">
+        <button>Options</button>
+        <div class="dropdown-content">
+            <a href="#formSubmission" onclick="showSection('formSubmission')">Form Submission</a>
+            <a href='review.html' onclick="showSection('certificateValidation')">Certificates Validation</a>
+        </div>
+    </div>
+
+    <div id="formSubmission" class="hidden-section">
+        <h1 style="font-family: Verdana, Geneva, Tahoma, sans-serif;">Student's Request</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Register No</th>
+                    <th>Department-Section</th>
+                    <th>Year</th>
+                    <th>CGPA</th>
+                    <th>Event Start Date</th>
+                    <th>Event End Date</th>
+                    <th>College Name</th>
+                    <th>Brochure</th>
+                    <th>Verified Email</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="userTableBody">
+                <!-- User data will be inserted here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- <div id="certificateValidation" class="hidden-section">
+        <h1>Student's Certificates</h1>
+        Additional content for Certificates Validation
+    </div> -->
+
+
+    <script>
+        function showSection(sectionId) {
+            // Hide both sections initially
+            document.getElementById('formSubmission').classList.remove('visible-section');
+            document.getElementById('certificateValidation').classList.remove('visible-section');
+            document.getElementById('formSubmission').classList.add('hidden-section');
+            document.getElementById('certificateValidation').classList.add('hidden-section');
+            
+            // Show the selected section
+            document.getElementById(sectionId).classList.add('visible-section');
+            document.getElementById(sectionId).classList.remove('hidden-section');
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            if (isNaN(date.getTime())) {
+                return 'N/A';
+            }
+
+            // Array of month names
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            
+            // Get day, month, year, hours, and minutes
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = months[date.getMonth()];
+            const year = date.getFullYear();
+
+            let hours = date.getHours();
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'p.m.' : 'a.m.';
+            
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            
+            return `${day}-${month}-${year} ${hours}:${minutes} ${ampm}`;
+        }
+
+        async function fetchStudents() {
+            try {
+                const response = await fetch('http://localhost:3001/getStudents');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const students = await response.json();
+                console.log('Fetched students:', students); // Log data for debugging
+
+                const tableBody = document.getElementById('userTableBody');
+                
+                tableBody.innerHTML = ''; // Clear existing rows
+
+                students.sort((a, b) => {
+                    const statusA = localStorage.getItem(`student_${a._id}`);
+                    const statusB = localStorage.getItem(`student_${b._id}`);
+                    if (statusA === 'accepted') return 1;
+                    if (statusA === 'rejected') return 1;
+                    if (statusB === 'accepted') return -1;
+                    if (statusB === 'rejected') return -1;
+                    return 0; // This handles 'pending' and 'pending' which are equal
+                });
+                
+                students.forEach(student => {
+                    const row = document.createElement('tr');
+                    row.dataset.id = student._id; // Add student ID to row data
+
+                    // Retrieve the status from localStorage
+                    const storedStatus = localStorage.getItem(`student_${student._id}`);
+
+                    row.innerHTML = `
+                        <td>${student.name}</td>
+                        <td>${student.registerNumber}</td>
+                        <td>${student.department}</td> 
+                        <td>${student.year}</td>
+                        <td>${student.cgpa}</td>
+                        <td>${formatDate(student.startDate)}</td>
+                        <td>${formatDate(student.endDate)}</td>
+                        <td>${student.collegeName}</td>
+                        <td><a href="${student.file1}" target="_blank">View File1</a></td>
+                        <td><a href="${student.file2}" target="_blank">View File2</a></td>
+                        <td>
+                            <button class="accept-button" onclick="acceptUser(this)">Approve</button>
+                            <button class="reject-button" onclick="rejectUser(this)">Reject</button>
+                        </td>
+                    `;
+
+                    // Apply stored status
+                    if (storedStatus === 'accepted') {
+                        row.dataset.status = 'accepted';
+                        row.classList.add('disabled');
+                        row.querySelector('.accept-button').disabled = true;
+                        row.querySelector('.accept-button').style.backgroundColor = 'darkgreen';
+                        row.querySelector('.accept-button').style.color = 'white';
+                        row.querySelector('.reject-button').disabled = true;
+                        moveToEnd(row); // Keep the accepted row at the end
+                    } else if (storedStatus === 'rejected') {
+                        row.dataset.status = 'rejected';
+                        row.classList.add('disabled');
+                        row.querySelector('.reject-button').disabled = true;
+                        row.querySelector('.reject-button').style.backgroundColor = 'darkred';
+                        row.querySelector('.reject-button').style.color = 'white';
+                        row.querySelector('.accept-button').disabled = true;
+                        moveToEnd(row); // Keep the rejected row at the end
+                    }
+
+                    tableBody.appendChild(row);
+                });
+
+            } catch (error) {
+                console.error('Error fetching students:', error);
+            }
+        }
+
+        function moveToEnd(row) {
+            const tableBody = document.getElementById('userTableBody');
+            tableBody.appendChild(row); // Move the row to the end
+        }
+
+        async function acceptUser(button) {
+            const row = button.closest('tr');
+            if (row.dataset.status) return; // If status is already set, return
+
+            const studentId = row.dataset.id; // Assume row has data-id attribute with student ID
+            
+            const studentData = {
+                id: studentId,
+                name: row.children[0].textContent, // Adjust based on actual structure
+                registerNumber: row.children[1].textContent,
+                startDate: row.children[3].textContent,
+                endDate: row.children[4].textContent,
+                collegeName: row.children[5].textContent
+            };
+
+            row.dataset.status = 'accepted';
+            row.classList.add('disabled'); // Disable row
+
+            // Disable action buttons
+            button.disabled = true;
+            button.style.backgroundColor = 'darkgreen'; // Indicate acceptance
+            button.style.color = 'white';
+            button.parentElement.querySelector('.reject-button').disabled = true;
+            
+            moveToEnd(row);
+            // Store status in localStorage
+            localStorage.setItem(`student_${studentId}`, 'accepted');
+
+            // Update status in mentor backend
+            try {
+                await fetch('http://localhost:3001/updateStudentStatus', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ id: studentId, status: 'accepted' }),
+                });
+
+                // Synchronize status with class incharge backend
+                await fetch('http://localhost:3003/syncStudent', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+            } catch (error) {
+                console.error('Error updating status:', error);
+            }
+        }
+
+        async function rejectUser(button) {
+            const row = button.closest('tr');
+            if (row.dataset.status) return; // If status is already set, return
+
+            const studentId = row.dataset.id; // Assume row has data-id attribute with student ID
+            
+            row.dataset.status = 'rejected';
+            row.classList.add('disabled'); // Disable row
+            
+            // Disable action buttons
+            button.disabled = true;
+            button.style.backgroundColor = 'darkred'; // Indicate rejection
+            button.style.color = 'white';
+            button.parentElement.querySelector('.accept-button').disabled = true;
+            
+            moveToEnd(row); // Move row to the end
+
+            // Store status in localStorage
+            localStorage.setItem(`student_${studentId}`, 'rejected');
+
+            // Update status in backend
+            try {
+                await fetch('http://localhost:3001/updateStudentStatus', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ id: studentId, status: 'rejected' }),
+                });
+
+                await fetch('http://localhost:3003/removeStudent', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ id: studentId }),
+                });
+            } catch (error) {
+                console.error('Error updating status:', error);
+            }
+        }
+
+        function sortTable(columnIndex) {
+            const table = document.querySelector('table');
+            const rows = Array.from(table.rows).slice(1); // Skip the header row
+
+            rows.sort((rowA, rowB) => {
+                const cellA = rowA.cells[columnIndex].textContent.trim();
+                const cellB = rowB.cells[columnIndex].textContent.trim();
+
+                if (columnIndex === 1) {
+                    // Sort register number as a number (if column is Register No)
+                    return parseInt(cellA) - parseInt(cellB);
+                } else if (columnIndex === 2) {
+                    // Sort department-section as strings (if column is Department-Section)
+                    return cellA.localeCompare(cellB);
+                } else if (columnIndex === 3) {
+                    // Sort year as a number (if column is Year)
+                    return parseInt(cellA) - parseInt(cellB);
+                } else {
+                    // Sort other columns as strings (if column is Name or others)
+                    return cellA.localeCompare(cellB);
+                }
+            });
+
+            // Append sorted rows back to the table
+            rows.forEach(row => table.appendChild(row));
+        }
+
+        // Search by Name
+        function searchName() {
+            const input = document.getElementById("searchName");
+            const filter = input.value.toUpperCase();
+            const tableBody = document.getElementById("userTableBody");
+            const rows = tableBody.getElementsByTagName("tr");
+
+            for (let i = 0; i < rows.length; i++) {
+                const columns = rows[i].getElementsByTagName("td");
+                const cellText = columns[0].textContent || columns[0].innerText; // Name column
+                rows[i].style.display = cellText.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+            }
+        }
+
+        // Search by Register No
+        function searchRegisterNo() {
+            const input = document.getElementById("searchRegisterNo");
+            const filter = input.value.toUpperCase();
+            const tableBody = document.getElementById("userTableBody");
+            const rows = tableBody.getElementsByTagName("tr");
+
+            for (let i = 0; i < rows.length; i++) {
+                const columns = rows[i].getElementsByTagName("td");
+                const cellText = columns[1].textContent || columns[1].innerText; // Register No column
+                rows[i].style.display = cellText.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+            }
+        }
+
+        // Search by Year
+        function searchYear() {
+            const input = document.getElementById("searchYear");
+            const filter = input.value.toUpperCase();
+            const tableBody = document.getElementById("userTableBody");
+            const rows = tableBody.getElementsByTagName("tr");
+
+            for (let i = 0; i < rows.length; i++) {
+                const columns = rows[i].getElementsByTagName("td");
+                const cellText = columns[3].textContent || columns[3].innerText; // Year column
+                rows[i].style.display = cellText.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+            }
+        }
+
+        function searchStartDate() {
+            const input = document.getElementById("searchStartDate");
+            const filter = input.value.toUpperCase();
+            const tableBody = document.getElementById("userTableBody");
+            const rows = tableBody.getElementsByTagName("tr");
+
+            for (let i = 0; i < rows.length; i++) {
+                const columns = rows[i].getElementsByTagName("td");
+                const cellText = columns[5].textContent || columns[5].innerText; // Event Start Date column
+                rows[i].style.display = cellText.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+            }
+        }
+
+        // Search by Event End Date
+        function searchEndDate() {
+            const input = document.getElementById("searchEndDate");
+            const filter = input.value.toUpperCase();
+            const tableBody = document.getElementById("userTableBody");
+            const rows = tableBody.getElementsByTagName("tr");
+
+            for (let i = 0; i < rows.length; i++) {
+                const columns = rows[i].getElementsByTagName("td");
+                const cellText = columns[6].textContent || columns[6].innerText; // Event End Date column
+                rows[i].style.display = cellText.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+        const dropdown = document.querySelector('.dropdown');
+        const button = dropdown.querySelector('button');
+
+        button.addEventListener('click', function () {
+            dropdown.classList.toggle('show');
+        });
+
+        // Close the dropdown if the user clicks outside
+        document.addEventListener('click', function (e) {
+            if (!dropdown.contains(e.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+    });
+
+        window.onload = fetchStudents;
+    </script>
+</body>
+</html>

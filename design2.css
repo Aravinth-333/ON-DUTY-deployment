@@ -1,0 +1,132 @@
+/* Apply box-sizing to all elements */
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Courier New', Courier, monospace;
+  /* color: white; */
+}
+
+/* Container for centering elements */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Center vertically */
+  height: 100vh; /* Full viewport height */
+}
+
+/* Form container */
+.form-container {
+  width: 100%;
+  max-width: 600px; /* Max width for larger screens */
+  padding: 20px;
+  /* border: 1px solid #ddd; */
+  border-radius: 10px;
+  background: transparent;
+}
+
+/* Gemini form container */
+#gemini-form-container {
+  width: 100%;
+}
+
+/* Form styling */
+form {
+  width: 100%;
+  max-width: 100%; /* Ensure it doesn't exceed screen width */
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: transparent;
+}
+
+/* Header styling */
+h2 {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+/* Label styling */
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #f5f7fa;
+}
+
+/* Select styling */
+select {
+  width: calc(100% - 20px);
+  padding: 10px;
+  margin: 10px 0 20px 0;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-sizing: border-box;
+  opacity: 0.9; /* Slightly less transparent */
+}
+
+/* Row styling for form elements */
+.row {
+  display: flex;
+  flex-direction: column; /* Stack columns vertically on smaller screens */
+  margin-bottom: 20px;
+}
+
+/* Column styling for form elements */
+.column {
+  width: 100%; /* Full width on smaller screens */
+}
+
+/* Button container styling */
+.buttons {
+  display: flex;
+  justify-content: center;
+}
+
+/* Button styling */
+.buttons button {
+  color: white;
+  background-color: #6e4225;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  width: 150px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-right: 10px ; /* Margin between buttons */
+}
+
+/* Button hover effect */
+.buttons button:hover { 
+  background: #00FF00;
+}
+
+/* Body styling */
+body {
+  background: linear-gradient(#00b7c2, #4ef037);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0; /* Remove padding */
+  color: white;
+  background-image: url(gif2.gif);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+/* Media queries for responsive design */
+@media (max-width: 600px) {
+  .row {
+    flex-direction: column; /* Stack rows vertically on smaller screens */
+  }
+  .column {
+    width: 100%; /* Full width on smaller screens */
+  }
+  .buttons {
+    flex-direction: column; /* Stack buttons vertically on smaller screens */
+  }
+}

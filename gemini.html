@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Registration Form </title>
+  <style>
+    form {
+      margin: auto;
+      width: min(600px, 80%);
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="datetime-local"],
+    input[type="url"],
+    textarea,
+    select,
+    #file1,
+    #file2
+    {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-sizing: border-box;
+      opacity: 0.5;
+      transition: all 0.3s ease;
+    }
+    .input-container {
+  position: relative;
+  display: inline-block; /* Adjust this to fit your layout needs */
+}
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="datetime-local"]:focus,
+    input[type="url"]:focus,
+    textarea:focus,
+    select:focus {
+      border-color: #ddd;
+      outline: none;
+    }
+
+    textarea {
+      height: 100px;
+      resize: vertical;
+      background-color: transparent;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+    }
+
+    .buttons button {
+      background-color: #854d28;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      width: 150px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    .buttons button:hover {
+      background-color: #6e4225;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .cgpa {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-sizing: border-box;
+      opacity: 0.5;
+      color: #ffce54;
+    }
+    .valid {
+  border-color: green !important;
+border-radius: 2px;
+}
+
+.invalid {
+  border-color: red !important;
+  /* background-color: #fde7e7 !important; */
+}
+
+  </style>
+</head>  
+<body style="background-color: #000;">
+  <link rel="stylesheet" href="design1.css">
+  <form action="/register" method="post">
+    <h2>ON-DUTY REGISTRATION FORM</h2>
+
+    <label for="name">Name (With Initial):</label>
+    <input type="text" id="name" name="name" readonly>
+    
+    <p id="name-exist-message" style="color: red;"></p>
+
+    <label for="register-number">Register Number:</label>
+    <input type="text" id="register-number" name="registerNumber" readonly>
+    
+    <label for="department">Department-Section:</label>
+    <input type="text" id="department" name="department" readonly>
+
+    <label for="year">Year:</label>
+<select id="year" name="year" required>
+  <option value="">Select Your Year</option>
+  <option value="1st year">1st year</option>
+  <option value="2nd year">2nd year</option>
+  <option value="3rd year">3rd year</option>
+  <option value="4th year">4th year</option>
+</select>
+
+    
+    <label for="email">Email Address:</label>
+    <input type="email" id="email" name="email" readonly>
+    <label for="cgpa">Enter Your CGPA:</label>
+    <input type="number" id="cgpa" name="cgpa" class="cgpa" max="10" min="6" step="0.01" readonly>
+    
+    <label for="eventtype">Event Type:</label>
+<select id="eventtype" name="eventType" required>
+  <option value="">Select type</option>
+  <option value="Internal">Internal</option>
+  <option value="External">External</option>
+</select>
+
+<!-- Internal Type Section (Initially hidden) -->
+<div id="internal-type" style="display: none;">
+  <label for="internal-participant">Participant or Volunteer</label>
+  <select id="internal-participant" name="internalType" required>
+    <option value="">Select Option</option>
+    <option value="Participant">Participant</option>
+    <option value="Volunteer">Volunteer</option>
+  </select>
+  
+  <!-- Participant Options (Initially hidden) -->
+  <div id="participant-options" style="display: none;">
+    <label for="workshop-or-symposium">Workshop or Symposium</label>
+    <select id="workshop-or-symposium" name="workshopOrSymposium" required>
+      <option value="">Select Option</option>
+      <option value="Workshop">Workshop</option>
+      <option value="Symposium">Symposium</option>
+    </select>
+    
+    <!-- Workshop Options (Initially hidden) -->
+    <div id="workshop-options" style="display: none;">
+      <label for="workshop-type">Workshop Topics</label>
+      <select id="workshop-type" name="workshopType">
+        <option value="">Select Topic</option>
+        <option value="AI">AI</option>
+        <option value="ML">ML</option>
+        <option value="DS">DS</option>
+        <option value="IOT">IOT</option>
+        <option value="CS">CS</option>
+        <option value="Others">Others</option>
+      </select>
+      <div id="other-workshop" style="display: none;">
+        <label for="other-workshop-input">Specify Workshop Topic:</label>
+        <input type="text" id="other-workshop-input" name="otherWorkshopInput">
+      </div>
+    </div>
+    
+    <!-- Symposium Options (Initially hidden) -->
+    <div id="symposium-options" style="display: none;">
+      <label for="symposium-type">Symposium Activities</label>
+      <select id="symposium-type" name="symposiumType">
+        <option value="">Select Activity</option>
+        <option value="Paper Presentation">Paper Presentation</option>
+        <option value="Quiz">Quiz</option>
+        <option value="Project Expo">Project Expo</option>
+        <option value="Others">Others</option>
+      </select>
+      <div id="other-symposium" style="display: none;">
+        <label for="other-symposium-input">Specify Symposium Activity:</label>
+        <input type="text" id="other-symposium-input" name="otherSymposiumInput">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- External Type Section -->
+<div id="external-type" style="display: none;">
+  <label for="external-event">Event Type</label>
+  <select id="external-event" name="externalEvent" required>
+    <option value="">Select Option</option>
+    <option value="Workshop">Workshop</option>
+    <option value="Symposium">Symposium</option>
+  </select>
+
+  <!-- Workshop Options -->
+  <div id="workshop-section" style="display: none;">
+    <label for="workshop-external">Workshop Topics</label>
+    <select id="workshop-external" name="workshopExternalType" required>
+      <option value="">Select Topic</option>
+      <option value="AI">AI</option>
+      <option value="ML">ML</option>
+      <option value="DS">DS</option>
+      <option value="IOT">IOT</option>
+      <option value="CS">CS</option>
+      <option value="Others">Others</option>
+    </select>
+    <div id="other-workshop-external" style="display: none;">
+      <label for="other-workshop-external-input">Specify Workshop Topic:</label>
+      <input type="text" id="other-workshop-external-input" name="otherWorkshopExternalInput">
+    </div>
+  </div>
+
+  <!-- Symposium Options -->
+  <div id="symposium-section" style="display: none;">
+    <label for="symposium-external">Symposium Activities</label>
+    <select id="symposium-external" name="symposiumExternalType" required>
+      <option value="">Select Activity</option>
+      <option value="Paper Presentation">Paper Presentation</option>
+      <option value="Quiz">Quiz</option>
+      <option value="Project Expo">Project Expo</option>
+      <option value="Others">Others</option>
+    </select>
+    <div id="other-symposium-external" style="display: none;">
+      <label for="other-symposium-external-input">Specify Symposium Activity:</label>
+      <input type="text" id="other-symposium-external-input" name="otherSymposiumExternalInput">
+    </div>
+  </div>
+</div>
+
+
+    <label for="collegename">College Name:</label>
+    <input type="text" id="collegename" name="collegeName" required>
+    
+    <label for="start-date">Event Start Date:</label>
+    <input type="datetime-local" id="start-date" name="startDate" class="datetime" required>
+    
+    <label for="end-date">Event End Date:</label>
+    <input type="datetime-local" id="end-date" name="endDate" class="datetime" required>
+    
+    <label for="file1">Upload File1:</label>
+    <input type="url" id="file1" name="file1" placeholder="Google Drive URL" required>
+    
+    <label for="file2">Upload File2:</label>
+    <input type="url" id="file2" name="file2" placeholder="Google Drive URL" required>
+    
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" maxlength="250" style="font-size: medium; color:#fff;"></textarea>
+    
+
+  
+    <div class="buttons">
+      <button type="reset">Reset</button>
+      <button type="submit">Submit</button>
+    </div>
+  </form>  
+  <script>
+   document.addEventListener('DOMContentLoaded', function () {
+  // Get references to the elements
+  const eventTypeSelect = document.getElementById('eventtype');
+  const internalTypeDiv = document.getElementById('internal-type');
+  const externalTypeDiv = document.getElementById('external-type');
+  const internalParticipantSelect = document.getElementById('internal-participant');
+  const participantOptionsDiv = document.getElementById('participant-options');
+  const workshopSelect = document.getElementById('workshop-type');
+  const otherWorkshopDiv = document.getElementById('other-workshop');
+  const symposiumSelect = document.getElementById('symposium-type');
+  const otherSymposiumDiv = document.getElementById('other-symposium');
+  const externalEventSelect = document.getElementById('external-event');
+  const workshopExternalSelect = document.getElementById('workshop-external');
+  const otherWorkshopExternalDiv = document.getElementById('other-workshop-external');
+  const symposiumExternalSelect = document.getElementById('symposium-external');
+  const otherSymposiumExternalDiv = document.getElementById('other-symposium-external');
+  
+  // Show/Hide sections based on event type (Internal/External)
+  eventTypeSelect.addEventListener('change', function () {
+    const eventType = eventTypeSelect.value;
+
+    if (eventType === 'Internal') {
+      internalTypeDiv.style.display = 'block';
+      externalTypeDiv.style.display = 'none';
+    } else if (eventType === 'External') {
+      externalTypeDiv.style.display = 'block';
+      internalTypeDiv.style.display = 'none';
+    } else {
+      internalTypeDiv.style.display = 'none';
+      externalTypeDiv.style.display = 'none';
+    }
+    toggleRequiredAttributes(); // Update required fields based on visibility
+  });
+
+  // Show/Hide based on participant selection (Internal)
+  internalParticipantSelect.addEventListener('change', function () {
+    const internalType = internalParticipantSelect.value;
+    if (internalType === 'Participant') {
+      participantOptionsDiv.style.display = 'block';
+    } else {
+      participantOptionsDiv.style.display = 'none';
+    }
+    toggleRequiredAttributes(); // Update required attributes when visibility changes
+  });
+
+  // Show/Hide based on Workshop or Symposium selection (Internal)
+  document.getElementById('workshop-or-symposium').addEventListener('change', function () {
+    const selection = this.value;
+    if (selection === 'Workshop') {
+      document.getElementById('workshop-options').style.display = 'block';
+      document.getElementById('symposium-options').style.display = 'none';
+    } else if (selection === 'Symposium') {
+      document.getElementById('symposium-options').style.display = 'block';
+      document.getElementById('workshop-options').style.display = 'none';
+    } else {
+      document.getElementById('workshop-options').style.display = 'none';
+      document.getElementById('symposium-options').style.display = 'none';
+    }
+    toggleRequiredAttributes(); // Update required attributes when visibility changes
+  });
+
+  // Show/Hide "Others" for Workshop and Symposium (Internal)
+  workshopSelect.addEventListener('change', function () {
+    if (workshopSelect.value === 'Others') {
+      otherWorkshopDiv.style.display = 'block';
+    } else {
+      otherWorkshopDiv.style.display = 'none';
+    }
+    toggleRequiredAttributes(); // Update required attributes when visibility changes
+  });
+
+  symposiumSelect.addEventListener('change', function () {
+    if (symposiumSelect.value === 'Others') {
+      otherSymposiumDiv.style.display = 'block';
+    } else {
+      otherSymposiumDiv.style.display = 'none';
+    }
+    toggleRequiredAttributes(); // Update required attributes when visibility changes
+  });
+
+  // Show/Hide based on Event Type selection (External)
+  externalEventSelect.addEventListener('change', function () {
+    const selection = externalEventSelect.value;
+    if (selection === 'Workshop') {
+      document.getElementById('workshop-section').style.display = 'block';
+      document.getElementById('symposium-section').style.display = 'none';
+    } else if (selection === 'Symposium') {
+      document.getElementById('symposium-section').style.display = 'block';
+      document.getElementById('workshop-section').style.display = 'none';
+    } else {
+      document.getElementById('workshop-section').style.display = 'none';
+      document.getElementById('symposium-section').style.display = 'none';
+    }
+    toggleRequiredAttributes(); // Update required fields when selection changes
+  });
+
+  // Show/Hide "Others" for Workshop and Symposium (External)
+  workshopExternalSelect.addEventListener('change', function () {
+    if (workshopExternalSelect.value === 'Others') {
+      otherWorkshopExternalDiv.style.display = 'block';
+    } else {
+      otherWorkshopExternalDiv.style.display = 'none';
+    }
+    toggleRequiredAttributes(); // Update required attributes when visibility changes
+  });
+
+  symposiumExternalSelect.addEventListener('change', function () {
+    if (symposiumExternalSelect.value === 'Others') {
+      otherSymposiumExternalDiv.style.display = 'block';
+    } else {
+      otherSymposiumExternalDiv.style.display = 'none';
+    }
+    toggleRequiredAttributes(); // Update required attributes when visibility changes
+  });
+
+  // Dynamically set required attributes based on visibility of fields
+  function toggleRequiredAttributes() {
+    const eventType = eventTypeSelect.value;
+    const internalTypeVisible = internalTypeDiv.style.display === 'block';
+    const externalTypeVisible = externalTypeDiv.style.display === 'block';
+    const participantOptionsVisible = participantOptionsDiv.style.display === 'block';
+    const workshopSectionVisible = document.getElementById('workshop-section').style.display === 'block';
+    const symposiumSectionVisible = document.getElementById('symposium-section').style.display === 'block';
+
+    // For Internal Type
+    if (internalTypeVisible) {
+      internalParticipantSelect.setAttribute('required', 'true');
+    } else {
+      internalParticipantSelect.removeAttribute('required');
+    }
+
+    // For Participant Options in Internal Type
+    if (participantOptionsVisible) {
+      document.getElementById('workshop-or-symposium').setAttribute('required', 'true');
+    } else {
+      document.getElementById('workshop-or-symposium').removeAttribute('required');
+    }
+
+    // For External Type Workshop and Symposium
+    if (externalTypeVisible) {
+      externalEventSelect.setAttribute('required', 'true');
+    } else {
+      externalEventSelect.removeAttribute('required');
+    }
+
+    if (workshopSectionVisible) {
+      workshopExternalSelect.setAttribute('required', 'true');
+    } else {
+      workshopExternalSelect.removeAttribute('required');
+    }
+
+    if (symposiumSectionVisible) {
+      symposiumExternalSelect.setAttribute('required', 'true');
+    } else {
+      symposiumExternalSelect.removeAttribute('required');
+    }
+
+    // Show/Hide "Others" fields based on selection
+    if (workshopSelect.value === 'Others' || workshopExternalSelect.value === 'Others') {
+      otherWorkshopDiv.style.display = 'block';
+      otherWorkshopExternalDiv.style.display = 'block';
+    } else {
+      otherWorkshopDiv.style.display = 'none';
+      otherWorkshopExternalDiv.style.display = 'none';
+    }
+
+    if (symposiumSelect.value === 'Others' || symposiumExternalSelect.value === 'Others') {
+      otherSymposiumDiv.style.display = 'block';
+      otherSymposiumExternalDiv.style.display = 'block';
+    } else {
+      otherSymposiumDiv.style.display = 'none';
+      otherSymposiumExternalDiv.style.display = 'none';
+    }
+  }
+
+  // Initial check on page load
+  toggleRequiredAttributes();
+});
+
+</script>
+  <script src="registration.js"></script>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Certificate Review</title>
+</head>
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    table, th, td {
+        border: 1px solid black;
+    }
+    th, td {
+        padding: 10px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    .accept-button {
+        background-color: lightgreen;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+    .reject-button {
+        background-color: lightcoral;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+    .disabled {
+        background-color: #d3d3d3; /* Grey out color */
+        pointer-events: none; /* Disable all mouse events */
+    }
+
+   /* Container for the dropdown */
+/* Container for the dropdown */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* The button that triggers the dropdown */
+.dropdown button {
+    background-color: #4CAF50; /* Green background */
+    color: white;               /* White text */
+    padding: 12px 16px;         /* Padding for button */
+    font-size: 16px;            /* Font size */
+    border: none;               /* No border */
+    cursor: pointer;           /* Pointer cursor on hover */
+    border-radius: 5px;         /* Rounded corners */
+    transition: background-color 0.3s ease; /* Smooth transition */
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between text and icon */
+}
+
+/* Hover effect for the dropdown button */
+.dropdown button:hover {
+    background-color: #45a049; /* Darker green */
+}
+
+/* Dropdown content container */
+.dropdown-content {
+    visibility: hidden; /* Initially hidden */
+    position: absolute;
+    background-color: #ffffff; /* White background */
+    min-width: 160px; /* Minimum width of the dropdown */
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    z-index: 1; /* Make sure dropdown is above other elements */
+    border-radius: 5px; /* Rounded corners for the dropdown */
+    padding: 8px 0; /* Padding inside dropdown */
+    opacity: 0; /* Initially hidden */
+    transition: opacity 0.2s ease-in-out, visibility 0s linear 0.2s; /* Smooth transition */
+}
+
+/* When dropdown is visible */
+.dropdown.show .dropdown-content {
+    visibility: visible; /* Show dropdown */
+    opacity: 1; /* Make the dropdown visible */
+    transition-delay: 0s; /* Ensure transition happens instantly */
+}
+
+/* Styling for each dropdown link */
+.dropdown-content a {
+    color: #333; /* Dark text color */
+    padding: 12px 20px; /* Padding around the text */
+    text-decoration: none; /* Remove underline */
+    display: block; /* Make links block level */
+    font-size: 14px; /* Font size for links */
+}
+
+/* Hover effect for dropdown links */
+.dropdown-content a:hover {
+    background-color: #f1f1f1; /* Light gray background on hover */
+    color: #007bff; /* Blue text color on hover */
+}
+
+/* Optional: Add a little arrow next to the button */
+.dropdown button::after {
+    content: '▼'; /* Downward arrow */
+    font-size: 12px;
+    margin-left: 10px; /* Space between text and arrow */
+}
+
+/* Responsive styling for smaller screens */
+@media screen and (max-width: 600px) {
+    .dropdown button {
+        font-size: 14px; /* Smaller button text on mobile */
+        padding: 10px 12px; /* Adjust padding */
+    }
+
+    .dropdown-content a {
+        font-size: 12px; /* Smaller font size for links */
+        padding: 10px 16px; /* Adjust padding */
+    }
+}
+
+</style>
+<body>
+    <!-- Dropdown menu -->
+    <div class="dropdown">
+        <button>Options</button>
+        <div class="dropdown-content">
+            <a href="mentor.html" onclick="showSection('formSubmission')">Form Submission</a>
+            <a href='review.html' onclick="showSection('certificateValidation')">Certificates Validation</a>
+        </div>
+    </div>
+
+  <h2>Pending Certificates</h2>
+  
+  <!-- Add a row for email display -->
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>File 1</th>
+        <th>File 2</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="certificatesTable"></tbody>
+  </table>
+
+  <script>
+    // Fetch email from sessionStorage and display it in every certificate row
+    const email = sessionStorage.getItem('email');
+    
+    // Fetch certificates data from the backend
+    async function fetchCertificates() {
+      const response = await fetch('http://localhost:3001/getPendingCertificates');
+      const certificates = await response.json();
+      const table = document.getElementById('certificatesTable');
+      
+      certificates.forEach(cert => {
+        const row = document.createElement('tr');
+        
+        // Populate the table with the certificate data and the email
+        row.innerHTML = `
+          <td>${email ? email : 'No email found'}</td>
+          <td><a href="${cert.file1}" target="_blank" onclick="return validateURL('${cert.file1}')">View File 1</a></td>
+          <td><a href="${cert.file2}" target="_blank" onclick="return validateURL('${cert.file2}')">View File 2</a></td>
+          <td>
+            <button class="accept-button" onclick="updateStatus('${cert._id}', 'accepted')">Accept</button>
+            <button class="reject-button" onclick="updateStatus('${cert._id}', 'rejected')">Reject</button>
+          </td>
+        `;
+        
+        table.appendChild(row);
+      });
+    }
+
+    // Function to validate URL before opening
+    function validateURL(url) {
+      if (!url || url.trim() === '') {
+        alert('File URL is missing or invalid!');
+        return false;
+      }
+      return true;
+    }
+
+    // Function to update the certificate status
+    async function updateStatus(id, status) {
+      await fetch('http://localhost:3001/updateCertificateStatus', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, status }),
+      });
+      alert(`Certificate status updated to ${status}.`);
+      location.reload();
+    }
+
+     document.addEventListener('DOMContentLoaded', function () {
+        const dropdown = document.querySelector('.dropdown');
+        const button = dropdown.querySelector('button');
+
+        button.addEventListener('click', function () {
+            dropdown.classList.toggle('show');
+        });
+
+        // Close the dropdown if the user clicks outside
+        document.addEventListener('click', function (e) {
+            if (!dropdown.contains(e.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+    });
+    // Fetch certificates data when the page loads
+    fetchCertificates();
+  </script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+    <link rel="stylesheet" type="text/css" href="otp-dialog.css">
+</head>
+<body>
+    <div class="otp-dialog">
+        <h2>Enter the OTP</h2>
+        <div class="otp-inputs">
+            <input type="text" maxlength="1" class="otp-box" id="otp1">
+            <input type="text" maxlength="1" class="otp-box" id="otp2">
+            <input type="text" maxlength="1" class="otp-box" id="otp3">
+            <input type="text" maxlength="1" class="otp-box" id="otp4">
+            <input type="text" maxlength="1" class="otp-box" id="otp5">
+            <input type="text" maxlength="1" class="otp-box" id="otp6">
+        </div>
+        <button id="verify-otp-button" onclick="verifyOtp()">Verify OTP</button>
+    </div>
+    <script>
+        function moveToNextInput(currentInput) {
+            const nextInput = currentInput.nextElementSibling;
+            if (nextInput && nextInput.classList.contains('otp-box')) {
+                nextInput.focus();
+            }
+        }
+
+        function handleOtpInput(event) {
+            const input = event.target;
+
+            if (input.value.length === input.maxLength) {
+                moveToNextInput(input);
+            }
+
+            if (input.value.length === 0) {
+                const previousInput = input.previousElementSibling;
+                if (previousInput && previousInput.classList.contains('otp-box')) {
+                    previousInput.focus();
+                }
+            }
+        }
+
+        document.querySelectorAll('.otp-box').forEach(input => {
+            input.addEventListener('input', handleOtpInput);
+        });
+
+        async function verifyOtp() {
+            const otpInputs = document.querySelectorAll('.otp-box');
+            const otp = Array.from(otpInputs).map(input => input.value).join('');
+            const emailInput = sessionStorage.getItem('email');
+
+            const response = await fetch('/verify-otp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ Email: emailInput, otp: otp }),
+            });
+
+            const result = await response.text();
+            alert(result);
+
+            if (response.ok) {
+                sessionStorage.setItem('otpVerified', true);
+                window.location.href = '/success.html';
+            }
+        }
+    </script>
+    <script src="facultyloginscript.js"></script>
+</body>
+</html>

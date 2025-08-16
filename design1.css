@@ -1,0 +1,156 @@
+ * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Courier New', Courier, monospace;
+    /* color: white; */
+  }
+  
+  form {
+    margin: auto;
+    width: min(600px, 80%);
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: transparent;
+  }
+  
+  h2 {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    /* color: antiquewhite; */
+    color: #f5f7fa;
+  }
+  .file1{
+    background-color:transparent;
+  }
+
+  option{
+    border: 1px solid #ddd;
+    /* box-sizing: border-box; */
+    opacity: 0.5;
+    /* background-color: #0e35d0; */
+    color:#0f17efd1;
+  }  
+  .row {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    margin-bottom: 20px;
+  }
+  #eventtype{
+    background-color: transparent;
+    color: #e8e9ed;
+  }
+  #year{
+    background-color: transparent;
+    color: #e8e9ed;
+  }
+  
+  .column {
+    width: 22%;
+  }
+  
+  .buttons {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .buttons button {
+    /* background-color: #854d28; */
+    /* background-color:#0a21c0; */
+    /* background-color: #050a44; */
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    width: 150px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  
+  .buttons button:hover {
+    /* background-color: #6e4225; */
+    /* background-color: #050a44; */
+    /* background-color:#0a21c0; */
+
+  }
+  
+  body {
+    background: linear-gradient(#00b7c2, #4ef037);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    color: white;
+  }
+  body{
+    background-image: url(gif2.gif);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+  }
+  input[type=text],
+  input[type=number],
+  input[type=email],
+  input[type=datetime-local],
+  input[type=url]
+  {
+    /* color:#4ef037; */
+    color: #e8e9ed;
+    background-color: transparent;
+  }
+  /* #description{
+    background-color: transparent;
+  } */
+
+  /* Responsive Styles */
+@media (max-width: 768px) {
+  .row {
+      flex-direction: column;
+      align-items: center;
+  }
+  
+  .column {
+      width: 100%;
+      margin-bottom: 10px;
+  }
+  
+  .buttons {
+      flex-direction: column;
+  }
+  
+  .buttons button {
+      width: 100%;
+      margin: 5px 0;
+  }
+  
+  h2 {
+      font-size: 24px;
+  }
+  
+  form {
+      width: 90%;
+      padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  h2 {
+      font-size: 20px;
+  }
+
+  .buttons button {
+      padding: 8px 15px;
+      font-size: 14px;
+  }
+}

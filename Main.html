@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REC | HOME</title>
+    <link rel="icon" type="image/x-icon" href="reclogo.jpg" >
+    <link rel="stylesheet" href="homepage.css">
+</head>
+<body>
+    <div class="banner">
+        <div class="navbar">
+            <div class="navbar-toggle" id="navbar-toggle">
+                &#9776; <!-- Hamburger icon -->
+            </div>
+            <ul class="navbar-menu" id="navbar-menu">
+                <li><a href="#" id="home">Home</a></li>
+                <li><a href="#" id="about">About Us</a></li>
+                <li><a href="#" id="feedback">Feedback</a></li>
+            </ul>
+        </div>
+        <div class="content">
+            <h1>ON-DUTY REGISTRATION FORM</h1>
+            <p>---RAJALAKSHMI ENGINEERING COLLEGE---</p>
+            <button type="submit" id="studentlogin"><span></span>Student Login</button>
+            <button type="button" id="facultylogin"><span></span>Faculty Login</button>
+        </div>
+    </div>
+    <script>
+        document.getElementById("home").addEventListener('click',function(){
+            event.preventDefault()
+        })
+        if(performance.navigation.type === performance.navigation.TYPE_RELOAD)
+        {
+            window.location.href="homepage.html"
+        }
+    </script>
+    <script src="homepage.js"></script>
+</body>
+</html>

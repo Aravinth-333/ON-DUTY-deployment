@@ -1,0 +1,87 @@
+*{
+    font-family: 'Courier New', Courier, monospace;
+    color: white;
+}
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #000;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.container{
+    position: relative;
+    text-align: center;
+    width: 320px;
+    height: 370px;
+    background: #000000;
+     box-shadow: 0 0 50px  #009688;   ; 
+    border-radius: 20px;
+    padding: 40px;
+    overflow: hidden;
+}
+img {
+    width: 250px;
+    
+}
+body{
+    background-image: url(gif2.gif);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    filter: brightness(1.3);
+}
+/* button{
+    width: 200px;
+    padding: 15px 0;
+    text-align: center;
+    margin: 20px 10px;
+    border-radius: 25px;
+    font-weight: bold;
+    border: 2px solid #009688;
+    background: transparent;
+    color:#000;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    background: #0ef;
+    box-shadow: 0 0 10px #0ef;
+} */
+
+button {
+    position: relative;
+    width: 100%;
+    height: 40px;
+    background: #0ef;
+    box-shadow: 0 0 10px #0ef;
+    font-size: 16px;
+    color: #000;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 30px;
+    border: none;
+    outline: none;
+    border-radius: 25px;
+    margin: 20px 0px;
+    width: 300px;
+    
+  }
+span{
+    background: #009688;
+    height: 100%;
+    width: 0;
+    border-radius: 25px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: -1;
+    transition: 0.5s;
+}
+
+button:hover span{
+    width:100%
+}
+

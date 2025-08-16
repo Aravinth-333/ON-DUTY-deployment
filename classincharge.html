@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Incharge</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .approve-button {
+            background-color: lightgreen;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .reject-button {
+            background-color: lightcoral;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .disabled {
+            background-color: #d3d3d3; /* Grey out color */
+            pointer-events: none; /* Disable all mouse events */
+        }
+    </style>
+</head>
+<body>
+    <h1>Class Incharge</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Register No</th>
+                <th>Event Start Date</th>
+                <th>Event End Date</th>
+                <th>College Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="userTableBody">
+            <!-- User data will be inserted here -->
+        </tbody>
+    </table>
+
+    <script>
+        function formatDate(dateString) {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+        return 'N/A';
+    }
+
+    // Array of month names
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    
+    // Get day, month, year, hours, and minutes
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+
+    let hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'p.m.' : 'a.m.';
+    
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    
+    return `${day}-${month}-${year} ${hours}:${minutes} ${ampm}`;
+}
+
+
+        async function fetchAcceptedStudents() {
+            try {
+                // const response = await fetch('http://localhost:3001/getAcceptedStudents');
+                const response = await fetch('http://localhost:3002/getAcceptedStudents');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const students = await response.json();
+                console.log('Fetched students:', students); // Log data for debugging
+
+                const tableBody = document.getElementById('userTableBody');
+                tableBody.innerHTML = ''; // Clear existing rows
+
+                students.forEach(student => {
+                    const row = document.createElement('tr');
+                    row.dataset.id = student._id; // Add student ID to row data
+
+                    row.innerHTML = `
+                <td>${student.name}</td>
+                <td>${student.registerNumber}</td>
+                <td>${formatDate(student.startDate)}</td>
+                <td>${formatDate(student.endDate)}</td>
+                <td>${student.collegeName}</td>
+                <td>
+                    <button class="approve-button" onclick="approveStudent(this)">Approve</button>
+                    <button class="reject-button" onclick="rejectStudent(this)">Reject</button>
+                </td>
+                    `;
+                    if (student.status === 'approved') {
+                row.classList.add('disabled');
+                row.querySelector('.approve-button').style.backgroundColor = 'darkgreen';
+                row.querySelector('.approve-button').style.color = 'white';
+                row.querySelector('.reject-button').disabled = true;
+            } else if (student.status === 'rejected') {
+                row.classList.add('disabled');
+                row.querySelector('.reject-button').style.backgroundColor = 'darkred';
+                row.querySelector('.reject-button').style.color = 'white';
+                row.querySelector('.approve-button').disabled = true;
+            }
+                moveToEnd(row); // Keep the rejected row at the end
+
+                    tableBody.appendChild(row);
+                });
+                
+            } catch (error) {
+                console.error('Error fetching accepted students:', error);
+            }
+        }
+
+        function moveToEnd(row) {
+            const tableBody = document.getElementById('userTableBody');
+            tableBody.appendChild(row); // Move the row to the end
+        }
+
+        async function approveStudent(button) {
+            const row = button.closest('tr');
+            const studentId = row.dataset.id; // Assume row has data-id attribute with student ID
+
+            row.dataset.status = 'approved';
+            row.classList.add('disabled'); // Disable row
+
+            // Disable action buttons
+            button.disabled = true;
+            button.style.backgroundColor = 'darkgreen'; // Indicate approval
+            button.style.color = 'white';
+            button.parentElement.querySelector('.reject-button').disabled = true;
+            // Store status in localStorage
+    localStorage.setItem(`student_${studentId}`, 'accepted');
+
+    moveToEnd(row); // Move row to the end
+
+            // Update status in backend
+            try {
+                await fetch('http://localhost:3002/updateStudentStatus', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ id: studentId, status: 'approved' }),
+                });
+            } catch (error) {
+                console.error('Error updating status:', error);
+            }
+        }
+
+        async function rejectStudent(button) {
+            const row = button.closest('tr');
+            // if (row.dataset.status) return;
+            const studentId = row.dataset.id; // Assume row has data-id attribute with student ID
+
+            row.dataset.status = 'rejected';
+            row.classList.add('disabled'); // Disable row
+
+            // Disable action buttons
+            button.disabled = true;
+            button.style.backgroundColor = 'darkred'; // Indicate rejection
+            button.style.color = 'white';
+            button.parentElement.querySelector('.approve-button').disabled = true;
+
+            moveToEnd(row);
+
+            // Store status in localStorage
+    localStorage.setItem(`student_${studentId}`, 'rejected');
+
+            // Update status in backend
+            try {
+                await fetch('http://localhost:3002/updateStudentStatus', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ id: studentId, status: 'rejected' }),
+                });
+            } catch (error) {
+                console.error('Error updating status:', error);
+            }
+        }
+
+        window.onload = fetchAcceptedStudents;
+    </script>
+</body>
+</html>

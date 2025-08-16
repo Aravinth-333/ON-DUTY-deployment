@@ -1,0 +1,169 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.banner {
+    width: 100%;
+    height: 100vh; 
+    background-image: linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.75)), url(background.gif);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: brightness(1.3);
+}
+
+.navbar {
+    width: 100%;
+    padding: 35px 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    position: fixed; /* Use fixed positioning */
+    top: 0;
+    right: 0;
+    background: transparent;
+    z-index: 1000; /* Ensure navbar is above other content */
+}
+
+.navbar-toggle {
+    display: none; /* Hide by default */
+    font-size: 24px;
+    cursor: pointer;
+    color: #fff;
+    position: absolute;
+    right: 15px;
+    top: 15px; /* Adjust top position to ensure visibility */
+    z-index: 1100; /* Ensure hamburger icon is above the menu */
+}
+
+.navbar-menu {
+    display: flex; /* Default display for larger screens */
+    list-style: none;
+}
+
+.navbar-menu li {
+    list-style: none;
+    display: inline-block;
+    margin: 0 20px;
+    position: relative;
+}
+
+.navbar-menu li a {
+    text-decoration: none;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.navbar-menu li::after {
+    content: '';
+    height: 3px;
+    width: 0%;
+    background: #009688;
+    position: absolute;
+    left: 0;
+    bottom: -10px;
+    transition: 0.5s;
+}
+
+.navbar-menu li:hover::after {
+    width: 100%;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+    .navbar-menu {
+        display: none; /* Hide menu by default on mobile */
+        position: absolute;
+        top: 55px; /* Adjust based on the hamburger icon's height */
+        left: 0;
+        background:transparent;
+        width: 100%;
+        flex-direction: column;
+        text-align: center;
+        padding-top: 15px; /* Ensure menu items are not too close to the top */
+    }
+
+    .navbar-menu.active {
+        display: flex; /* Show menu when active */
+    }
+
+    .navbar-menu li {
+        margin: 15px 0;
+    }
+
+    .navbar-toggle {
+        display: block; /* Show hamburger icon on mobile */
+        position: absolute;
+        right: 15px;
+        top: 15px; /* Adjust top position to ensure visibility */
+    }
+}
+
+.content {
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: center;
+    color: transparent;
+    background-image: linear-gradient(to left, #0c056d, #1fffff);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+}
+
+.content h1 {
+    font-size: 50px;
+    margin-top: 80px;
+}
+
+.content p {
+    margin: 20px auto;
+    font-weight: 100;
+    line-height: 25px;
+}
+
+body {
+    background-image: url(rec.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    filter: brightness(1.3);
+}
+
+button {
+    width: 200px;
+    padding: 15px 0;
+    text-align: center;
+    margin: 20px 10px;
+    border-radius: 25px;
+    font-weight: bold;
+    border: 2px solid #009688;
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+span {
+    background: #009688;
+    height: 100%;
+    width: 0;
+    border-radius: 25px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: -1;
+    transition: 0.5s;
+}
+
+button:hover span {
+    width: 100%;
+}
+
+button:hover {
+    border: none;
+}
